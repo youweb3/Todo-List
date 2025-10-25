@@ -21,24 +21,45 @@ function displayTasks() {
     taskList.innerHTML = ""; //clear existing tasks
 
     //Loop through tasks array and create list items
-    tasks.forEach((task) => {
+    tasks.forEach((task, index) => {
         const listItem = document.createElement("li"); //Create new list item
 
         //create checkbox to mark tasks as completed
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
+        checkbox.addEventListener("change", function () {
+            listItem.classList.toggle("completed", this.checked);
+        });
 
         //create span to hold task text not affected by checkbox
         const textSpan = document.createElement("span");
         textSpan.textContent = task; // put text inside the span
 
-        //Event listener to toggle completed class on list item when checkbox is changed
-        checkbox.addEventListener("change", function () {
-            listItem.classList.toggle("completed", this.checked);
+
+        const editButton = document.createElement("button");
+        editButton.textContent = "Edit";
+        editButton.addEventListener("click", function () {
+            const newTask = prompt("edit your task:", task);
+            if (newTask) {
+                tasks[index] = newTask.trim();
+                displayTasks();
+            }
         });
+
+        const deleteButton = document.createElement("button");
+        deleteButton.textContent = "Delete";
+        deleteButton.addEventListener("click", () => {
+            tasks.splice(index, 1);
+            displayTasks();
+        });
+
 
         listItem.appendChild(checkbox); //Add the checkbox to the list item
         listItem.appendChild(textSpan); // Add the text span to the list item like: <li><input type="checkbox"><span>Task Text</span></li>
-        taskList.appendChild(listItem); //Add li to the task list ul like: <ul><li>...</li></ul>
+        listItem.appendChild(editButton);
+        listItem.appendChild(deleteButton);
+
+        //Add li to the task list ul like: <ul><li>...</li></ul>
+        taskList.appendChild(listItem);
     });
 }
