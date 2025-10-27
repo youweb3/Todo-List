@@ -14,6 +14,7 @@ addTaskButton.addEventListener("click", function () {
     displayTasks(); //call function to create and display the task
 
     taskInput.value = ""; //Clear the input field
+    updateClearAllButtonState();//Update the state of the clear all button
 });
 
 //Function to display all tasks
@@ -63,3 +64,21 @@ function displayTasks() {
         taskList.appendChild(listItem);
     });
 }
+
+//clear all tasks
+const clearAllButton = document.getElementById("clear-tasks-btn");
+clearAllButton.addEventListener("click", function () {
+    if (tasks.length === 0) return; //if no tasks, do nothing
+
+    const confirmed = confirm ("Are you sure you want to clear all tasks");
+    if (!confirmed) return;
+
+    tasks = []; //Clear the tasks array
+    displayTasks();//Refresh the task list display
+    updateClearAllButtonState();
+})
+
+function updateClearAllButtonState() {
+    clearAllButton.disabled = tasks.length === 0;
+}
+updateClearAllButtonState();

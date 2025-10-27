@@ -6,3 +6,5 @@ A simple task management application built with **HTML, CSS, and JavaScript**.
 - Mark tasks as completed
 - Edit task
 - Delete tasks
+- Clear All Tasks
+- LocalStorage
