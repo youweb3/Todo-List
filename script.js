@@ -52,6 +52,7 @@ function displayTasks() {
         deleteButton.addEventListener("click", () => {
             tasks.splice(index, 1);
             displayTasks();
+            updateClearAllButtonState()
         });
 
 
@@ -70,7 +71,7 @@ const clearAllButton = document.getElementById("clear-tasks-btn");
 clearAllButton.addEventListener("click", function () {
     if (tasks.length === 0) return; //if no tasks, do nothing
 
-    const confirmed = confirm ("Are you sure you want to clear all tasks");
+    const confirmed = confirm ("Are you sure you want to clear all tasks?");
     if (!confirmed) return;
 
     tasks = []; //Clear the tasks array
