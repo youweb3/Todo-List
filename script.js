@@ -1,16 +1,25 @@
-let tasks = []; //Array to holds all tasks
+document.addEventListener("DOMContentLoaded", () => {
+    
+let tasks = JSON.parse(localStorage.getItem("tasks")) || []; //Initialize tasks array from localStorage or empty array
 
+function saveTasksToLocalStorage() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+//Get refrences to Dom elements
 const taskInput = document.getElementById("taskInput");
 const taskList = document.getElementById("taskList");
 const addTaskButton = document.getElementById("add-task-btn");
+const clearAllButton = document.getElementById("clear-tasks-btn");
 
+//Add task
 addTaskButton.addEventListener("click", function () {
     const taskText = taskInput.value.trim(); //Get the value from input field
 
     if (taskText === "") return; // if input is empty, do nothing
 
     tasks.push(taskText); //Add the new task to the end of the tasks array
-
+    saveTasksToLocalStorage(); //Save updated tasks array to localStorage
     displayTasks(); //call function to create and display the task
 
     taskInput.value = ""; //Clear the input field
@@ -30,32 +39,36 @@ function displayTasks() {
         checkbox.type = "checkbox";
         checkbox.addEventListener("change", function () {
             listItem.classList.toggle("completed", this.checked);
+            saveTasksToLocalStorage();
         });
 
         //create span to hold task text not affected by checkbox
         const textSpan = document.createElement("span");
         textSpan.textContent = task; // put text inside the span
 
-
+        //Edit button
         const editButton = document.createElement("button");
         editButton.textContent = "Edit";
         editButton.addEventListener("click", function () {
             const newTask = prompt("edit your task:", task);
             if (newTask) {
                 tasks[index] = newTask.trim();
+                saveTasksToLocalStorage();
                 displayTasks();
             }
         });
 
+        //Delete button
         const deleteButton = document.createElement("button");
         deleteButton.textContent = "Delete";
         deleteButton.addEventListener("click", () => {
             tasks.splice(index, 1);
+            saveTasksToLocalStorage();
             displayTasks();
             updateClearAllButtonState()
         });
 
-
+        //Append elements to list item
         listItem.appendChild(checkbox); //Add the checkbox to the list item
         listItem.appendChild(textSpan); // Add the text span to the list item like: <li><input type="checkbox"><span>Task Text</span></li>
         listItem.appendChild(editButton);
@@ -67,7 +80,6 @@ function displayTasks() {
 }
 
 //clear all tasks
-const clearAllButton = document.getElementById("clear-tasks-btn");
 clearAllButton.addEventListener("click", function () {
     if (tasks.length === 0) return; //if no tasks, do nothing
 
@@ -75,6 +87,7 @@ clearAllButton.addEventListener("click", function () {
     if (!confirmed) return;
 
     tasks = []; //Clear the tasks array
+    saveTasksToLocalStorage(); //Update localStorage, clear from the localStorage
     displayTasks();//Refresh the task list display
     updateClearAllButtonState();
 })
@@ -83,3 +96,5 @@ function updateClearAllButtonState() {
     clearAllButton.disabled = tasks.length === 0;
 }
 updateClearAllButtonState();
+displayTasks(); //Display tasks on page load
+});
