@@ -18,7 +18,7 @@ addTaskButton.addEventListener("click", function () {
 
     if (taskText === "") return; // if input is empty, do nothing
 
-    tasks.push(taskText); //Add the new task to the end of the tasks array
+    tasks.push({ text:taskText, completed: false}); //Add the new task to the end of the tasks array
     saveTasksToLocalStorage(); //Save updated tasks array to localStorage
     displayTasks(); //call function to create and display the task
 
@@ -38,21 +38,26 @@ function displayTasks() {
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.addEventListener("change", function () {
+            task.completed = this.checked; //Update task completion status
             listItem.classList.toggle("completed", this.checked);
             saveTasksToLocalStorage();
         });
 
         //create span to hold task text not affected by checkbox
         const textSpan = document.createElement("span");
-        textSpan.textContent = task; // put text inside the span
+        textSpan.textContent = task.text; // put text inside the span
+        checkbox.checked = task.completed; //Set checkbox state based on task completion
+        if (task.completed) {
+            listItem.classList.add("completed"); //Add completed class if task is marked as completed
+        }
 
         //Edit button
         const editButton = document.createElement("button");
         editButton.textContent = "Edit";
         editButton.addEventListener("click", function () {
-            const newTask = prompt("edit your task:", task);
+            const newTask = prompt("Edit your task:", task.text);
             if (newTask) {
-                tasks[index] = newTask.trim();
+                tasks[index].text = newTask.trim();
                 saveTasksToLocalStorage();
                 displayTasks();
             }
