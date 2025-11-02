@@ -103,3 +103,28 @@ function updateClearAllButtonState() {
 updateClearAllButtonState();
 displayTasks(); //Display tasks on page load
 });
+
+////////////// Dark Mode Toggle //////////////////
+const themeToggleBtn = document.getElementById("theme-toggle-btn");
+
+themeToggleBtn.addEventListener("click", () => {
+    document.body.classList.toggle("dark-mode");
+
+    const isDarkMode = document.body.classList.contains("dark-mode");
+
+    themeToggleBtn.textContent = isDarkMode ? "☀️" : "🌙";
+
+    //update localStorage and aria-pressed attribute
+    localStorage.setItem("theme", isDarkMode? "dark" : "light");
+        themeToggleBtn.setAttribute("aria-pressed", isDarkMode? "true" : "false");
+})
+
+//On page load, set the theme based on localStorage
+if (localStorage.getItem("theme") === "dark") {
+    document.body.classList.add("dark-mode");
+    themeToggleBtn.setAttribute("aria-pressed", "true");
+    themeToggleBtn.textContent = "☀️";
+} else {
+    themeToggleBtn.textContent = "🌙";
+    themeToggleBtn.setAttribute("aria-pressed", "false");
+}
