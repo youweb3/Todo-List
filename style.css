@@ -41,6 +41,14 @@ body {
   color: #888;
 }
 
+/* date style */
+.due-date {
+  font-size: 0.9em;
+  color: #666;
+  margin-left: 12px;
+}
+
+
 /* Buttons */
 #taskList button {
   margin-left: 15px;

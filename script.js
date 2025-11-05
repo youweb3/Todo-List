@@ -18,10 +18,18 @@ addTaskButton.addEventListener("click", function () {
 
     if (taskText === "") return; // if input is empty, do nothing
 
-    tasks.push({ text:taskText, completed: false}); //Add the new task to the end of the tasks array
+    const today = new Date();//Get today's date
+    const Options = {year: "numeric", month: "short", day: "numeric"};
+    const formattedDate = today.toLocaleDateString("en-GB", Options);
+
+    tasks.push({
+        text:taskText,
+        dueDate: formattedDate,
+        completed: false
+    }); //Add the new task to the end of the tasks array
+    
     saveTasksToLocalStorage(); //Save updated tasks array to localStorage
     displayTasks(); //call function to create and display the task
-
     taskInput.value = ""; //Clear the input field
     updateClearAllButtonState();//Update the state of the clear all button
 });
@@ -51,6 +59,12 @@ function displayTasks() {
             listItem.classList.add("completed"); //Add completed class if task is marked as completed
         }
 
+        //create span to hold due date
+        const dateSpan = document.createElement("span");
+        dateSpan.textContent = ` ${task.dueDate}`;
+        dateSpan.classList.add("due-date");
+        listItem.appendChild(dateSpan);
+
         //Edit button
         const editButton = document.createElement("button");
         editButton.textContent = "Edit";
@@ -76,6 +90,7 @@ function displayTasks() {
         //Append elements to list item
         listItem.appendChild(checkbox); //Add the checkbox to the list item
         listItem.appendChild(textSpan); // Add the text span to the list item like: <li><input type="checkbox"><span>Task Text</span></li>
+        listItem.appendChild(dateSpan);
         listItem.appendChild(editButton);
         listItem.appendChild(deleteButton);
 
